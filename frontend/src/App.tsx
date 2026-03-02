@@ -1,35 +1,24 @@
-import { createSignal } from 'solid-js'
-import solidLogo from './assets/solid.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// frontend/src/App.tsx
+import { Router, Route } from "@solidjs/router"; // นำเข้าแค่ Route พอ (ไม่มี Routes แล้ว)
+import LoginPage from "./app/pages/LoginPage";
 
-function App() {
-  const [count, setCount] = createSignal(0)
-
+function Layout(props: any) {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} class="logo" alt="Vite logo" />
-        </a>
-        <a href="https://solidjs.com" target="_blank">
-          <img src={solidLogo} class="logo solid" alt="Solid logo" />
-        </a>
-      </div>
-      <h1>Vite + Solid</h1>
-      <div class="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count()}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p class="read-the-docs">
-        Click on the Vite and Solid logos to learn more
-      </p>
-    </>
-  )
+    <div class="min-h-screen bg-gray-50">
+      {/* ใน Solid Router v0.15+ 
+         เราจะใช้ props.children เป็นตัวแสดงผลหน้าที่ถูกเลือกตาม Path 
+      */}
+      {props.children}
+    </div>
+  );
 }
 
-export default App
+export default function App() {
+  return (
+    // 💡 เอา Router มาครอบ Route โดยตรงเลยครับ ตัดปัญหาเรื่องท่อตัน
+    <Router>
+      <Route path="/" component={LoginPage} />
+      {/* <Route path="/dashboard" component={DashboardPage} /> */}
+    </Router>
+  );
+}
