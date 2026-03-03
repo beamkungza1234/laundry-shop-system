@@ -115,18 +115,16 @@ cd frontend && bun install
 
 โปรเจกต์นี้ใช้ตัวแปรสภาพแวดล้อมแยกกัน ให้สร้างไฟล์ `.env` ตามตัวอย่างที่เตรียมไว้ 
 
-* **Backend:** สร้าง `backend/.env`
+* **Backend:** แก้ไขไฟล์ `.env` ใน `/backend` ตามข้อความด้านล่าง
 ```env
 DATABASE_URL="file:./dev.db"
 JWT_SECRET="super-secret-key-for-dev"
-
 ```
 
 
-* **Frontend:** สร้าง `frontend/.env`
+* **Frontend:** แก้ไขไฟล์ `.env` ใน `/frontend` ตามข้อความด้านล่าง
 ```env
 VITE_API_URL="http://localhost:3000/api"
-
 ```
 
 
@@ -136,10 +134,9 @@ VITE_API_URL="http://localhost:3000/api"
 รันคำสั่งเพื่อสร้างตารางและใส่ข้อมูลทดสอบ (Seed) ในเครื่องตัวเอง:
 
 ```bash
-cd backend
+cd backend #เข้าไปที่โฟลเดอร์ backend
 bunx prisma db push
 bun run db:seed
-
 ```
 
 ### 4. การรันโปรเจกต์ (Development)
@@ -147,6 +144,13 @@ bun run db:seed
 * **Backend:** `cd backend && bun run dev` (รันที่พอร์ต 3000)
 * **Frontend:** `cd frontend && bun run dev` (รันที่พอร์ต 5173)
 
+---
+
+### 5. การจัดการฐานข้อมูล (Database Managment)
+รันเพื่อเรียกหน้าเว็บสำหรับการจัดการฐานข้อมูลที่เป็น GUI ได้โดย
+```bash
+npx prisma studio
+```
 ---
 
 ## 📂 โครงสร้างโปรเจกต์และจุดที่ต้องทำต่อ
