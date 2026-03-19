@@ -10,6 +10,9 @@ import QueuePage from "./app/pages/QueuePage";
 import PaymentPage from "./app/pages/PaymentPage";
 import ProfilePage from "./app/pages/ProfilePage";
 
+// @MatrixTurtle Frontend (Customer Interface) & QA
+import CustomerPortal from "./app/pages/CustomerPortal";
+
 // นำเข้า Layout ที่เราเพิ่งสร้าง
 import StaffLayout from "./app/components/StaffLayout";
 
@@ -34,6 +37,9 @@ export default function App() {
         <Route path="/payment" component={PaymentPage} />
         <Route path="/profile" component={ProfilePage} />
         
+        {/*เพิ่ม Route @MatrixTurtle Frontend (Customer Interface) & QA */}
+        <Route path="/customer-portal" component={CustomerPortal} />
+
         {/* [เพื่อนคนอื่น] มาต่อ Route ของตัวเองได้ที่นี่ */}
         {/* 🟢 [เพื่อนๆ] เพิ่ม Route สำหรับหน้าใหม่ๆ ต่อจากบรรทัดนี้ได้เลยครับ */}
         {/* ตัวอย่าง: <Route path="/dashboard" component={DashboardPage} /> */}
