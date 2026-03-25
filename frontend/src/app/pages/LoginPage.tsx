@@ -23,19 +23,36 @@ export default function LoginPage() {
     e.preventDefault();
 
     try {
-      // 1. เรียก API ยิงไปหา Hono Backend
       const response = await api.loginStaff(email(), password());
       
-      // 2. ถ้าสำเร็จ เซฟข้อมูลจริงที่ได้จาก Database ลง LocalStorage
-      localStorage.setItem("userRole", response.role);
-      localStorage.setItem("userName", response.name);
-      localStorage.setItem("token", response.token); 
+      // 🟢 1. ลอง Console.log ดูว่าหน้าตาข้อมูลที่ Backend ส่งมาเป็นแบบไหน
+      console.log("Login Response: ", response);
       
-      // 3. พาไปหน้า Dashboard
-      navigate("/dashboard", { replace: true });
+      // 🟢 2. ดักจับเผื่อ Backend ส่งข้อมูลมาในก้อน response.user
+      const role = response.role || response.user?.role || "manager"; // ถ้าหาไม่เจอจริงๆ สมมติให้เป็น manager ไปก่อน
+      const name = response.name || response.user?.name || "พนักงาน";
+      const token = response.token;
+      
+      localStorage.setItem("userRole", role);
+      localStorage.setItem("userName", name);
+      localStorage.setItem("token", token); 
+      
+      // 🟢 3. จัดการการนำทาง (ใส่ toLowerCase() เผื่อ Backend ส่งมาเป็นตัวพิมพ์ใหญ่)
+      const userRole = role.toLowerCase(); 
+      
+      if (userRole === "manager" || userRole === "admin") {
+        navigate("/dashboard", { replace: true });
+      } else if (userRole === "laundry-staff") {
+        navigate("/queue", { replace: true });
+      } else if (userRole === "front-staff") {
+        navigate("/customers", { replace: true });
+      } else {
+        // ถ้าไม่ตรงกับเงื่อนไขด้านบนเลย ให้โชว์ข้อความว่ามันคือ Role อะไร แล้วเด้งไป Dashboard ไว้ก่อน
+        alert(`ล็อกอินผ่าน! แต่สิทธิ์ของคุณคือ: ${role}`);
+        navigate("/dashboard", { replace: true }); 
+      }
       
     } catch (error: any) {
-      // 4. ถ้าผิดพลาด (เช่น รหัสผิด) แจ้งเตือนข้อความที่ส่งมาจาก Backend
       alert(error.message);
     }
   };
@@ -116,24 +133,6 @@ export default function LoginPage() {
     }
   };
 
-  const handleQuickLogin = (role: string) => {
-    const roleNames: Record<string, string> = {
-      'manager': 'ผู้จัดการร้าน',
-      'front-staff': 'พนักงานหน้าร้าน',
-      'laundry-staff': 'พนักงานซักรีด',
-      'customer': 'คุณสมหญิง (ลูกค้า)'
-    };
-    
-    localStorage.setItem('userRole', role);
-    localStorage.setItem('userName', roleNames[role]);
-    localStorage.setItem('token', `dummy-token-${role}`);
-    
-    if (role === 'customer') {
-      navigate('/customer-portal', { replace: true });
-    } else {
-      navigate('/dashboard', { replace: true });
-    }
-  };
 
   // --- Icons (SVG) ---
   const IconShirt = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"></path></svg>;
@@ -218,15 +217,6 @@ export default function LoginPage() {
                 </button>
               </form>
 
-              {/* Quick Access */}
-              <div class="mt-8 pt-6 border-t border-gray-100">
-                <p class="text-xs font-bold text-gray-500 mb-3 text-center uppercase tracking-wider">ทดลองเข้าสู่ระบบ (Demo)</p>
-                <div class="grid grid-cols-3 gap-2">
-                  <button onClick={() => handleQuickLogin('manager')} class="bg-gray-50 border border-gray-200 text-gray-700 text-xs font-bold py-2 rounded-lg hover:bg-gray-100 transition-colors">ผู้จัดการ</button>
-                  <button onClick={() => handleQuickLogin('front-staff')} class="bg-gray-50 border border-gray-200 text-gray-700 text-xs font-bold py-2 rounded-lg hover:bg-gray-100 transition-colors">หน้าร้าน</button>
-                  <button onClick={() => handleQuickLogin('laundry-staff')} class="bg-gray-50 border border-gray-200 text-gray-700 text-xs font-bold py-2 rounded-lg hover:bg-gray-100 transition-colors">ซักรีด</button>
-                </div>
-              </div>
             </div>
           </Show>
 
