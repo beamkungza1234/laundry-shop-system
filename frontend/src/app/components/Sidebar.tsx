@@ -33,7 +33,7 @@ export default function Sidebar() {
     { 
       name: "Dashboard", 
       path: "/dashboard", 
-      allowedRoles: ["manager", "front-staff"], // ผู้จัดการ และ หน้าร้าน
+      allowedRoles: ["manager"], // ผู้จัดการ
       icon: <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg> 
     },
     { 
@@ -69,13 +69,23 @@ export default function Sidebar() {
     }
   };
 
+  // 🟢 เพิ่มฟังก์ชันเช็คหน้าแรกของแต่ละตำแหน่ง
+  const getHomePath = () => {
+    if (userRole() === "manager") return "/dashboard";
+    if (userRole() === "laundry-staff") return "/queue";
+    return "/customers"; // สำหรับ front-staff หรือตำแหน่งอื่นๆ
+  };
+
+
+
   return (
     <nav class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
           
           <div class="flex items-center gap-8">
-            <A href={userRole() === "laundry-staff" ? "/queue" : "/dashboard"} class="flex items-center gap-2">
+            {/* 🟢 แก้ไขตรงนี้ ให้ใช้ getHomePath() แทนของเดิม */}
+            <A href={getHomePath()} class="flex items-center gap-2">
               <div class="bg-blue-600 p-2 rounded-lg">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"></path></svg>
               </div>
